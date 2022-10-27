@@ -1,10 +1,7 @@
 from collections import OrderedDict
 import logging
 from inspect import getframeinfo, stack
-
-from ifncli.surveys.influenzanet.translatable import TranslatableList
-
-
+from ...influenzanet.translatable import TranslatableList
 from ...influenzanet.survey import SurveyPath
 from ...influenzanet.expression.types import ARG_ITEM_KEY, ARG_SURVEYKEY, Arg, CompositeArgument, EnumerationReference, ItemPathReference, KeyReference, UnknownExpressionType
 from ...influenzanet.expression import KNOWN_EXPRESSIONS, ExpressionType, find_expression_type

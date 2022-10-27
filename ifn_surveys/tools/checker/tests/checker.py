@@ -1,8 +1,7 @@
 import unittest
-from ifncli.surveys.influenzanet.expression import Expression
-from ifncli.surveys.influenzanet.responses import RG_ROLES, RGROLES
-
-from ifncli.surveys.influenzanet.survey import ROLE_RESPONSE_GROUP, Survey, SurveyGroupItem, SurveyItemComponent, SurveyItemGroupComponent, SurveyItemResponseComponent, SurveySingleItem
+from ....influenzanet.expression import Expression
+from ....influenzanet.responses import RG_ROLES, RGROLES
+from ....influenzanet.survey import ROLE_RESPONSE_GROUP, Survey, SurveyGroupItem, SurveyItemComponent, SurveyItemGroupComponent, SurveyItemResponseComponent, SurveySingleItem
 
 def create_surveys(name, questions, selection=None):
     survey = Survey()

@@ -1,12 +1,11 @@
 from collections import OrderedDict
 import json
 from typing import Dict, List, Optional
-from ifncli.commands import survey
-from ifncli.surveys.influenzanet.dictionnary import ItemDictionnary
-from ifncli.surveys.influenzanet.survey import SurveyItem, SurveySingleItem
-from ifncli.surveys import standard
-from ifncli.surveys.standard.models import (MATRIX_CHOICE_TYPE, MULTIPLE_CHOICE_TYPE)
-from ifncli.surveys.standard.parser import json_parser_survey_standard
+from ..influenzanet.dictionnary import ItemDictionnary
+from ..influenzanet.survey import SurveyItem, SurveySingleItem
+from ..standard import standard
+from ..standard.models import (MATRIX_CHOICE_TYPE, MULTIPLE_CHOICE_TYPE)
+from ..standard.parser import json_parser_survey_standard
 from ifncli.utils import read_json, read_yaml
 
 from .. import influenzanet
