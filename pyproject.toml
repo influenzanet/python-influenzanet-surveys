@@ -36,3 +36,4 @@ validator= [
 
 [tool.setuptools-git-versioning]
 enabled = true
+template = "{tag}"
