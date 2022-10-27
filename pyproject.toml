@@ -1,5 +1,5 @@
 [build-system]
-requires = ["setuptools>=61.0", "setuptools-scm"]
+requires = ["setuptools>=61.0", "setuptools-git-versioning"]
 build-backend = "setuptools.build_meta"
 
 [project]
@@ -33,3 +33,6 @@ validator= [
 [project.urls]
 "Homepage" = "https://github.com/influenzanet/ifn-surveys"
 "Bug Tracker" = "https://github.com/influenzanet/ifn-surveys/issues"
+
+[tool.setuptools-git-versioning]
+enabled = true
