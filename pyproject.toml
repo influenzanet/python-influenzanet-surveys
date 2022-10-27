@@ -21,6 +21,13 @@ dependencies = [
   "jsonschema==4.*"
 ]
 
+[project.optional-dependencies]
+
+validator= [
+  "urllib==1.26.*",
+  "PyYAML==6.0"
+]
+
 [project.urls]
 "Homepage" = "https://github.com/influenzanet/ifn-surveys"
 "Bug Tracker" = "https://github.com/influenzanet/ifn-surveys/issues"

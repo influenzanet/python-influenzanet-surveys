@@ -1,12 +1,13 @@
 from collections import OrderedDict
 import json
+import yaml
 from typing import Dict, List, Optional
 from ..influenzanet.dictionnary import ItemDictionnary
 from ..influenzanet.survey import SurveyItem, SurveySingleItem
 from ..standard import standard
 from ..standard.models import (MATRIX_CHOICE_TYPE, MULTIPLE_CHOICE_TYPE)
 from ..standard.parser import json_parser_survey_standard
-from ifncli.utils import read_json, read_yaml
+from ..utils import read_json
 
 from .. import influenzanet
 from ..standard import StandardQuestion, StandardSurvey
@@ -16,6 +17,10 @@ from urllib.error import URLError
 
 class ConfigError(Exception):
     pass
+
+def read_yaml(path):
+    obj = yaml.load(open(path, 'r', encoding='UTF-8'),  Loader=yaml.FullLoader)
+    return obj
 
 def read_from_url(url):
     try:
