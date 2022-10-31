@@ -1,6 +1,8 @@
 Influenzanet Survey Management
 =====
 
+**Warning: This library is experimental an not ready to be used. Everything (including library existence/name) could change soon **
+
 inf-surveys is a python library to work with influenzanet surveys, mainly validation and transformation
 
 The purpose of this library is to work with existing surveys in json, it's not designed to create new survey json from scratch (for this use the typescript libraries).
