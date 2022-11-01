@@ -26,7 +26,7 @@ dependencies = [
 [project.optional-dependencies]
 
 validator= [
-  "urllib==1.26.*",
+  "urllib3==1.26.*",
   "PyYAML==6.0"
 ]
 
