@@ -1,19 +1,17 @@
 Influenzanet Survey Management
 =====
 
-**Warning: This library is experimental an not ready to be used. Everything (including library existence/name) could change soon **
-
-inf-surveys is a python library to work with influenzanet surveys, mainly validation and transformation
+influenzanet.surveys is a python library to work with influenzanet surveys, mainly validation and transformation
 
 The purpose of this library is to work with existing surveys in json, it's not designed to create new survey json from scratch (for this use the typescript libraries).
 
 ## Installation
 
 ```python
-pip install ifn-surveys
+pip install influenzanet.surveys
 
 # To use validation
-pip install ifn-surveys[validator]
+pip install influenzanet.surveys[validator]
 ```
 
 ## Features
@@ -34,7 +32,7 @@ An helper is provided to build html for all json in a directory :
 
 ```python
 
-from ifn_surveys.html import build_html_from_dir
+from influenzanet.surveys.html import build_html_from_dir
 
 ## Accept glob patterns and transform all surveys json into html (if a json is not a survey it will be ignored)
 ## Creates an html file in the same directory for each json, replacing existing html if already exists
