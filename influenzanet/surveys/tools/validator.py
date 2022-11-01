@@ -4,7 +4,7 @@ import yaml
 from typing import Dict, List, Optional
 from ..influenzanet.dictionnary import ItemDictionnary
 from ..influenzanet.survey import SurveyItem, SurveySingleItem
-from ..standard import standard
+from .. import standard
 from ..standard.models import (MATRIX_CHOICE_TYPE, MULTIPLE_CHOICE_TYPE)
 from ..standard.parser import json_parser_survey_standard
 from ..utils import read_json
