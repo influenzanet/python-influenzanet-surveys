@@ -1,3 +1,9 @@
+# v1.0.1
+
+- fix Survey versionId field
+- fix html rendering for metadata field
+- export read_survey_json at package level
+
 # v1.0
 
 **Breaking change** Survey model is now using the survey for study-engine from version 1.2.0 (history model refactoring)
