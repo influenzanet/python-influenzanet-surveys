@@ -13,6 +13,16 @@
 </ul>
 {% endmacro %}
 
+
+{% macro metadata(metadata) %}
+<h5>Metadata</h5> 
+<ul class="tags">
+{% for key,value in metadata.iteritems() %}
+    <li><var>{{key}}</var> : {{value}}</li>
+{% endfor %}
+</ul>
+{% endmacro %}
+
 {% macro translate(list) %}
   {% set tt = list.get_with_context(context)%}
   <ul class="{{ styles('translate-list') }}">
@@ -24,10 +34,10 @@
 
 {% macro render_item(item) %}
 <div class="survey-item">
-  <h3><var class="{{ styles('key') }} ">{{item['key']}}</var> {% if item['version'] %}(v<span class="{{ styles('item-version') }}">{{item['version']}}</span>){% endif %}</h3>
-  {% if item['versionTags'] %}
-   {{ tagList('Tags', item['versionTags'], 'version-tags') }}
-  {% endif %} {# versionTags #}
+  <h3><var class="{{ styles('key') }} ">{{item['key']}}</var></h3>
+  {% if item['metadata'] %}
+    {{ metadata(item['metadata']) }}
+  {% endif %}
   {% if item['follows'] %}
     {{ tagList('Follows', item['follows'], 'follows') }}
     </div>
@@ -184,11 +194,10 @@
  {% endif %} {# expr #}
 {% endmacro %}
 
-{% set survey_version = survey['current'] %}
-{% set definition = survey_version['surveyDefinition'] %}
+{% set definition = survey.survey_definition %}
   
 {% block survey %}
-<h1>Survey Definition of <em>{{ definition.key }}</em></h1>
+<h1>Survey <em>{{ definition.key }}</em> (<span class="{{ styles('item-version') }}">{{survey.version}}</span>)</h1>
   <dl class="survey-props row">
      <dt class="col-3">name</dt> 
      <dd class="col-9">{{ translate(survey.props.name) }}</dd>
@@ -198,9 +207,12 @@
      <dd class="col-9">{{ translate(survey.props.typicalDuration) }}</dd>
   </dl>
   <div class="survey-definition">
-  <h2>Current Definition</h2>
-  {% if survey_version['published'] %}
-    Published on {{ survey_version['published'].to_time() }}
+  <h2>Survey Definition</h2>
+  {% if survey['published'] %}
+    Published on {{ survey['published'].to_time() }}
+  {% endif %}
+  {% if survey['unpublished'] %}
+    Published on {{ survey['unpublished'].to_time() }}
   {% endif %}
   {{ render_item(definition) }}
   </div>

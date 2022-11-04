@@ -100,7 +100,7 @@ class SurveyChecker:
 
     def check(self, survey: Survey):
         
-        definition = survey.getCurrent()
+        definition = survey.survey_definition
     
         self.known_surveys.add(definition.key)
 
@@ -216,7 +216,7 @@ class SurveyChecker:
             has_params = len(exp.params) > 0
             exp_type = find_expression_type(exp.name)
             if exp_type is None or isinstance(exp_type, UnknownExpressionType):
-                self.notify(Problem.UNKNOWN_EXP, context)
+                self.notify(Problem.UNKNOWN_EXP, context, exp.name)
             else:
                 if exp_type.has_refs() and has_params:
                     self.check_expression_refs(exp, exp_type, context)

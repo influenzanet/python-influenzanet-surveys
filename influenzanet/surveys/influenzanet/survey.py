@@ -213,15 +213,19 @@ class SurveyItemResponseComponent(SurveyItemComponent):
 
     def get_type(self):
         return 'response'
+        
 class SurveyItem:
     
-    def __init__(self, key, id=None, version=None  ):
+    def __init__(self, key, id=None):
         self.key = key
         self.id = id
-        self.version = version
         self.condition:Expression = None
         self.follows:List[str] = None 
         self.priority = None
+        self.metadata: Dict = {}
+
+    def setMetadata(self, metadata: Dict):
+        self.metadata = metadata
 
     def get_readable_label(self, name):
         if self.id is not None:
@@ -229,8 +233,6 @@ class SurveyItem:
         else:
             k = str(self.key)
         label = "%s<key=%s>" % (name, k, )
-        if self.version is not None:
-            label += "[%d]" % (self.version)
         return label
 
     def get_dictionnary(self, parent_key:Optional[str]=None)-> Optional[List[ItemDictionnary]]:
@@ -258,8 +260,8 @@ class SurveyItemValidation:
 
 class SurveySingleItem(SurveyItem):
 
-    def __init__(self, key, components: SurveyItemGroupComponent, validations: Optional[List[SurveyItemValidation]], type, id=None, version=None):
-        super(SurveySingleItem, self).__init__(key=key, id=id, version=version)
+    def __init__(self, key, components: SurveyItemGroupComponent, validations: Optional[List[SurveyItemValidation]], type, id=None):
+        super(SurveySingleItem, self).__init__(key=key, id=id)
         self.components = components
         self.validations = validations
         self.type = type
@@ -345,8 +347,8 @@ class SurveySingleItem(SurveyItem):
 
 class SurveyGroupItem(SurveyItem):
 
-    def __init__(self, key, items, selection, id=None, version=None):
-        super(SurveyGroupItem, self).__init__(key=key, id=id, version=version)
+    def __init__(self, key, items, selection, id=None):
+        super(SurveyGroupItem, self).__init__(key=key, id=id)
         self.items = items
         self.selection = selection
 
@@ -393,4 +395,25 @@ class Survey(dict):
         return self['props']['name']
         
     def getCurrent(self)->SurveyItem:
-        return self['current']['surveyDefinition']
+        """
+            Get the current version definition of the survey
+            Deprecated use .survey_definition instead
+        """
+        return self['surveyDefinition']
+
+    @property
+    def survey_definition(self)->SurveyItem:
+        return self['surveyDefinition']
+
+    @property
+    def metadata(self)->Optional[Dict]:
+        """
+            get Survey metadata
+        """
+        return self['metadata']
+
+    def version(self):
+        """
+            get survey version Id
+        """
+        return self['versionID']

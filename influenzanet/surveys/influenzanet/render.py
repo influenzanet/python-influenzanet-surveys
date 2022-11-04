@@ -1,4 +1,4 @@
-from .parser import survey_parser, Survey
+from .parser import survey_parser, study_parser, Survey
 from .dictionnary import ItemDictionnary
 from ..readable import  as_readable
 from typing import List, Optional
@@ -17,7 +17,7 @@ def render_to_dict(survey: Survey)-> Optional[ItemDictionnary]:
     """
         Render a Survey model into a dictionary based view (see influenzanet.dictionnary.ItemDictionnary)
     """
-    item = survey['current']['surveyDefinition']
+    item = survey.survey_definition
     return item.get_dictionnary()
 
 def readable_study(study, context:Context):

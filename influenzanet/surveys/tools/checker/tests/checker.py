@@ -25,7 +25,7 @@ def create_surveys(name, questions, selection=None):
         validations = None
         item = SurveySingleItem(quid, components, validations, type=None)
         items.append(item)
-    survey['current'] = SurveyGroupItem(name, items, selection=selection)
+    survey['surveyDefinition'] = SurveyGroupItem(name, items, selection=selection)
     
     return survey
 

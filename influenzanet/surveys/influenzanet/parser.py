@@ -1,3 +1,4 @@
+from typing import Dict
 from .translatable import to_translatable,parse_translatable
 from .time import Timestamp
 from .survey import Study, Survey, SurveyGroupItem, SurveyItemValidation, SurveySingleItem, SurveyItemGroupComponent, SurveyItemResponseComponent, SurveyItemComponent
@@ -59,7 +60,6 @@ def component_parser(obj):
 
 def survey_item_parser(obj):
     _id = obj.get('id')
-    version = obj.get('version')
     key = obj['key']
     if 'items' in obj:
 
@@ -71,7 +71,7 @@ def survey_item_parser(obj):
             selection = expression_parser(obj['selectionMethod'])
         else:
             selection = None
-        item = SurveyGroupItem(key,  id=_id, items=ii, selection=selection, version=version )
+        item = SurveyGroupItem(key,  id=_id, items=ii, selection=selection)
 
     else:
         comp = component_parser(obj['components'])
@@ -96,11 +96,14 @@ def survey_item_parser(obj):
     if 'priority' in obj:
         item.priority = obj['priority']
 
+    if 'metadata' in obj:
+        item.setMetadata(obj['metadata'])
+
     return item
 
-def survey_parser(survey):
+def survey_parser(survey:Dict):
     """
-    Parse a json based survey (loaded from a json definition file) model into a python object model
+    Parse a dictionary based survey (loaded from a json definition file) model into a python object model
     
     Returns: Survey
 
@@ -108,12 +111,12 @@ def survey_parser(survey):
     pp =  survey['props']
     pp = to_translatable(pp, ['name','description', 'typicalDuration'])
     survey['props'] = pp
-    pp = survey['current']
-    if 'published' in pp:
+    if 'published' in survey:
         # published is not present when survey is only a draft from editor
-        pp['published'] = Timestamp(pp['published'])
-    pp['surveyDefinition'] = survey_item_parser(pp['surveyDefinition'])
-    survey['current'] = pp
+        survey['published'] = Timestamp(survey['published'])
+    if 'unpublished' in survey:
+        survey['unpublished'] = Timestamp(survey['unpublished'])
+    survey['surveyDefinition'] = survey_item_parser(survey['surveyDefinition'])
     return Survey(survey)
 
 def study_parser(study):
