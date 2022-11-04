@@ -3,6 +3,7 @@
 - fix Survey versionId field
 - fix html rendering for metadata field
 - export read_survey_json at package level
+- expression string are quoted in html output
 
 # v1.0
 
