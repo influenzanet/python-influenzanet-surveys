@@ -4,6 +4,8 @@ dev-install:
 
 build:
 	rm -f dist/*
+	setuptools-git-versioning > influenzanet/surveys/VERSION
+	python scripts/version.py
 	python -m build .
 
 publish:

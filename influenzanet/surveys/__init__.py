@@ -3,4 +3,5 @@ from .influenzanet import  readable_survey, survey_to_dictionnary, survey_parser
 from .readable import as_readable
 from .context import create_context, Context
 from .html import survey_to_html
+from .version import __version__
 
