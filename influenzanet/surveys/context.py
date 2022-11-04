@@ -2,7 +2,8 @@ from typing import List, Optional
 
 class Context:
     """
-    Rendering context
+    Rendering context. This class embeds parameters used in renderding and transforming layers
+    For example the languages to show in the output. 
     """
     def __init__(self, language:Optional[List[str]]=None):
         self.language = language
