@@ -88,7 +88,7 @@ class ExpressionTypeParser:
             if 'params' in expDef:
                 params = self.parse_arguments(expDef['params'], roles)
             else:
-                return UnknownExpressionType()
+                raise Exception("Unknown expression type, missing 'params' entry")
             if 'roles' in expDef:
                 for r in expDef['roles']:
                     role = self.parse_role(r, params)

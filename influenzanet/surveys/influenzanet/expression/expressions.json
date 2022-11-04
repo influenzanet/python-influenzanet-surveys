@@ -94,10 +94,22 @@
             "params":[ {"name":"item", "role":"item_key"}],
             "kind":"action"
         },
-        "LAST_RESPONSES_BY_KEY": {},
-        "ALL_RESPONSES_SINCE": {},
-        "RESPONSES_SINCE_BY_KEY": {},
-        "GET_LAST_SURVEY_ITEM": {},
+        "LAST_RESPONSES_BY_KEY": {
+            "kind": "action",
+            "params": []
+        },
+        "ALL_RESPONSES_SINCE": {
+            "kind": "action",
+            "params": []
+        },
+        "RESPONSES_SINCE_BY_KEY": {
+            "kind": "action",
+            "params": []
+        },
+        "GET_LAST_SURVEY_ITEM": {
+            "kind": "action",
+            "params": []
+        },
         "checkEventType": {
             "description":"Checks if the latest event is of the same type as specified in the parameter expression.",
             "kind":"action",
@@ -346,7 +358,9 @@
             ]
         },
         "getContext": {
-            "description": "Reference to the context variable storing e.g. participant infos"
+            "description": "Reference to the context variable storing e.g. participant infos",
+            "kind": "action",
+            "params": []
         },
         "getResponseItem": {
             "description": "Get response object for a specific item and slot",
@@ -428,7 +442,9 @@
             ]
         },
         "sequential":{
-            "description": "Make the order of items sequential"
+            "description": "Make the order of items sequential",
+            "kind": "client",
+            "params": []
         },
         "getSecondsSince": {
             "description": "Calculate time difference between 'now' and the reference time in seconds",
@@ -474,7 +490,8 @@
             ]
         },
         "isLoggedIn": {
-            "description": "Check if the participant is logged in currently."
+            "description": "Check if the participant is logged in currently.",
+            "params": []
         }
     },
     "enums": {
