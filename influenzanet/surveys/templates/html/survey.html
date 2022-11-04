@@ -189,7 +189,7 @@
         {% if not loop.last %},{% endif %} 
       {% endfor %})
     {% else %} {# is_expression #} 
-     {{ expr }}
+     {% if expr.is_numeric() %} <span class="expr-scalar-num">{{ expr }}</span>{% else %}<span class="expr-scalar-str">"{{ expr }}"</span>{% endif %}
     {% endif %}  {# is_expression #} 
  {% endif %} {# expr #}
 {% endmacro %}

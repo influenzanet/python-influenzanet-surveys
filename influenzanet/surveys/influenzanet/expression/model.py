@@ -54,6 +54,12 @@ class Scalar:
     def is_scalar(self):
         return True
 
+    def is_string(self):
+        return self.type == 'str' or self.type == ''
+
+    def is_numeric(self):
+        return self.type == 'num'
+
     def __repr__(self):
         if self.type == "str":
             return '"' + self.value + '"'
