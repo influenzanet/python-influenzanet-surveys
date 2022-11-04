@@ -14,11 +14,11 @@
 {% endmacro %}
 
 
-{% macro metadata(metadata) %}
+{% macro render_metadata(metadata) %}
 <h5>Metadata</h5> 
 <ul class="tags">
-{% for key,value in metadata.iteritems() %}
-    <li><var>{{key}}</var> : {{value}}</li>
+{% for key,value in metadata.items() %}
+    <li><var>{{key}}</var> : "{{value}}"</li>
 {% endfor %}
 </ul>
 {% endmacro %}
@@ -36,7 +36,7 @@
 <div class="survey-item">
   <h3><var class="{{ styles('key') }} ">{{item['key']}}</var></h3>
   {% if item['metadata'] %}
-    {{ metadata(item['metadata']) }}
+    {{ render_metadata(item['metadata']) }}
   {% endif %}
   {% if item['follows'] %}
     {{ tagList('Follows', item['follows'], 'follows') }}
@@ -197,7 +197,7 @@
 {% set definition = survey.survey_definition %}
   
 {% block survey %}
-<h1>Survey <em>{{ definition.key }}</em> (<span class="{{ styles('item-version') }}">{{survey.version}}</span>)</h1>
+<h1>Survey <em>{{ definition.key }}</em> (<span class="{{ styles('item-version') }}">{{ survey.version }}</span>)</h1>
   <dl class="survey-props row">
      <dt class="col-3">name</dt> 
      <dd class="col-9">{{ translate(survey.props.name) }}</dd>
@@ -206,6 +206,9 @@
      <dt class="col-3">typicalDuration</dt>
      <dd class="col-9">{{ translate(survey.props.typicalDuration) }}</dd>
   </dl>
+  {% if survey.metadata %}
+    {{ render_metadata(survey.metadata) }}
+  {% endif %}
   <div class="survey-definition">
   <h2>Survey Definition</h2>
   {% if survey['published'] %}
