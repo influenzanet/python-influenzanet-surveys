@@ -6,7 +6,7 @@ build-backend = "setuptools.build_meta"
 name = "influenzanet.surveys"
 dynamic = ["version"]
 authors = [
-  { name="Clément Turbelin", email="clement.turbelin@iplesp.upmc.fr" },
+  { name='Clement Turbelin', email="clement.turbelin@iplesp.upmc.fr" },
 ]
 description = "Influenzanet surveys management library"
 license = {text = "Apache-2.0"}
