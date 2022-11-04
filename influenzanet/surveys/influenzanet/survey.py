@@ -410,10 +410,13 @@ class Survey(dict):
         """
             get Survey metadata
         """
-        return self['metadata']
+        if 'metadata' in self:
+            return self['metadata']
+        return None
 
-    def version(self):
+    @property
+    def version_id(self):
         """
             get survey version Id
         """
-        return self['versionID']
+        return self['versionId']
