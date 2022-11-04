@@ -1,3 +1,6 @@
+from typing import Dict, Union
+
+from influenzanet.surveys.influenzanet.survey import Survey
 from .influenzanet import survey_parser
 from jinja2 import Template, FileSystemLoader, Environment
 from .context import Context, create_context
@@ -20,9 +23,13 @@ def styles(name):
         return known_styles[name] + ' '+ name
     return name
 
-def survey_to_html(survey, context: Context):
+def survey_to_html(survey:Union[Dict, Survey], context: Context):
+    """
+        Build an HTML document from a survey json
+    """
 
-    survey = survey_parser(survey)
+    if not isinstance(survey, Survey):
+        survey = survey_parser(survey)
 
     path = get_html_path()
 
