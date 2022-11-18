@@ -101,6 +101,18 @@ def survey_item_parser(obj):
 
     return item
 
+def context_rules_parser(ctx: Dict):
+    if 'mode' in ctx:
+        ctx['mode'] = expression_arg_parser(ctx['mode'])
+    if 'previousResponses' in ctx:
+        rr = []
+        for r in ctx['previousResponses']:
+            exp = expression_parser(r)
+            rr.append(exp)
+        ctx['previousResponses'] = rr
+    return ctx
+
+
 def survey_parser(survey:Dict):
     """
     Parse a dictionary based survey (loaded from a json definition file) model into a python object model
@@ -117,6 +129,17 @@ def survey_parser(survey:Dict):
     if 'unpublished' in survey:
         survey['unpublished'] = Timestamp(survey['unpublished'])
     survey['surveyDefinition'] = survey_item_parser(survey['surveyDefinition'])
+
+    if 'prefillRules' in survey:
+        rr = []
+        for r in survey['prefillRules']:
+            exp = expression_parser(r)
+            rr.append(exp)
+        survey['prefillRules'] = rr
+
+    if 'contextRules' in survey:
+        survey['contextRules'] = context_rules_parser(survey['contextRules'])
+
     return Survey(survey)
 
 def study_parser(study):

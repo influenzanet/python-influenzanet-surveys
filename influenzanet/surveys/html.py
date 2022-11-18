@@ -62,13 +62,17 @@ def build_html_from_dir(path, languages):
             # A study entry
             survey = survey['survey']
 
-        if not "props" in survey:
+        if not "props" in survey or not "surveyDefinition" in survey:
             print("%s is not a survey json" % f)
             continue
+        try:
+            h = survey_to_html(survey, context=create_context(language=languages))
 
-        h = survey_to_html(survey, context=create_context(language=languages))
+            fn, ext = os.path.splitext(f)
+            with open(fn + '.html', 'w') as o:
+                o.write(h)
+        except Exception as e:
+            print("Unable to process '%s'" % (f))
+            print(e)
 
-        fn, ext = os.path.splitext(f)
-        with open(fn + '.html', 'w') as o:
-            o.write(h)
 

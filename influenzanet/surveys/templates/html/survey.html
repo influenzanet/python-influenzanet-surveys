@@ -218,5 +218,34 @@
     Published on {{ survey['unpublished'].to_time() }}
   {% endif %}
   {{ render_item(definition) }}
+
+  {% if survey['prefillRules'] %}
+    <h3>Prefill Rules</h3>
+    <ul class="list-group">
+    {% for rule in survey['prefillRules'] %}
+      <li class="list-group-item prefill-rule">
+        {{ render_expression(rule) }}
+      </li>
+    {% endfor %}
+    </ul>
+  {% endif %}
+
+  {% if survey['contextRules'] %}
+    <h3>Context Rules</h3>
+    {% if ctx['mode'] %}
+      <p>Mode : {{ render_expression(ctx['mode']) }} </p> 
+    {% endif %} 
+    {% set ctx = survey['contextRules'] %}
+    {% if ctx['previousResponses'] %}
+    <h4>Previous Responses</h4>
+    <ul class="list-group">
+    {% for rule in ctx['previousResponses'] %}
+      <li class="list-group-item prefill-rule">
+        {{ render_expression(rule) }}
+      </li>
+    {% endfor %}
+    </ul>
+    {% endif %} 
+  {% endif %}
   </div>
 {% endblock survey %}
