@@ -1,3 +1,7 @@
+# v1.0.2
+
+- parse prefillRules and contextRules
+- render prefillRules and contextRules in html 
 # v1.0.1
 
 - fix Survey versionId field
