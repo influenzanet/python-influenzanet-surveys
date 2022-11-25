@@ -266,11 +266,13 @@ class SurveyChecker:
             if ref.role == ARG_ITEM_KEY:
                 if value =="this" and ref.param.allow_this:
                     logger.debug("Item key is 'this', skipping")
-                    return
+                    continue
                 if not value in self.item_keys:
+                    print(self.item_keys)
                     self.notify(Problem.UNKNOWN_REF, CheckContext(parent=ctx, value=value))
+                    continue
                 logger.debug("Item key '%s' found" % value)
-                return
+                continue
             if ref.role == ARG_SURVEYKEY:
                 if not value in self.known_surveys:
                     self.notify(Problem.UNKNOWN_REF, CheckContext(parent=ctx, value=value))
