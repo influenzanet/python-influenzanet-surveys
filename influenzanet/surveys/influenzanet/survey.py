@@ -290,34 +290,36 @@ class SurveySingleItem(SurveyItem):
             raise Exception("Several response group for %s "  % str(self) )
         
         if len(rg) == 0:
-                print("Warning no response group for %s" % str(self) )
+            print("Warning no response group for %s" % str(self) )
                 
         if len(rg) == 1:
-                rg = rg[0]
-                # print("ResponseGroup of %s %s" %  (self.key, type(rg)))
-                for rg_item in rg.items:
-                    role = rg_item.role
-                    if not role in RG_ROLES:
-                        print("Warning unknown role %s" % (role, ))
-                    if not role in RG_ROLES_DATA:
-                        continue
-                    # Find the component item with options
-                    oo = None
-                    if rg_item.is_group():
-                        # If it's a group let's find options
-                        oo = self._get_response_options(rg_item)
-                    d = ItemDictionnary(self.key, role, oo, parent_key, self)
-                    d.rg_key = rg.key
-                    return d
+            rg = rg[0]
+            # print("ResponseGroup of %s %s" %  (self.key, type(rg)))
+            for rg_item in rg.items:
+                role = rg_item.role
+                if not role in RG_ROLES:
+                    print("Warning unknown role %s" % (role, ))
+                # Find the component item with options
+                oo = None
+                if rg_item.is_group():
+                    # If it's a group let's find options
+                    oo = self._get_response_options(rg_item)
+                d = ItemDictionnary(self.key, role, oo, parent_key, self)
+                d.rg_key = rg.key
+                return d
         return None  
             
     def _get_response_options(self, itemComponent:SurveyItemComponent, root_key=None)->List[OptionDictionnary]:
         key = itemComponent.key
+        if key is None:
+            return []
         if root_key is not None:
             key = root_key + '.' + itemComponent.key
         options = []
         for item in itemComponent.items:
             if item.role in DISPLAY_ROLES:
+                continue
+            if item.key is None:
                 continue
             if item.is_group():
                 options.extend( self._get_response_options(item, key) )
