@@ -268,7 +268,6 @@ class SurveyChecker:
                     logger.debug("Item key is 'this', skipping")
                     continue
                 if not value in self.item_keys:
-                    print(self.item_keys)
                     self.notify(Problem.UNKNOWN_REF, CheckContext(parent=ctx, value=value))
                     continue
                 logger.debug("Item key '%s' found" % value)
