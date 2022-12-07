@@ -197,7 +197,7 @@
 {% set definition = survey.survey_definition %}
   
 {% block survey %}
-<h1>Survey <em>{{ definition.key }}</em> (<span class="{{ styles('item-version') }}">{{ survey.version }}</span>)</h1>
+<h1>Survey <em>{{ definition.key }}</em> (<span class="{{ styles('item-version') }}">{{ survey.version_id }}</span>)</h1>
   <dl class="survey-props row">
      <dt class="col-3">name</dt> 
      <dd class="col-9">{{ translate(survey.props.name) }}</dd>
