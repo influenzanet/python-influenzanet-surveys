@@ -8,6 +8,7 @@ from .templates.html import get_html_path
 import os
 import json
 import glob
+import traceback
 
 known_styles = {
   'item': 'card',
@@ -73,6 +74,6 @@ def build_html_from_dir(path, languages):
                 o.write(h)
         except Exception as e:
             print("Unable to process '%s'" % (f))
-            print(e)
+            traceback.print_exception(e)
 
 
