@@ -2,7 +2,7 @@ from typing import Dict
 from .translatable import to_translatable,parse_translatable
 from .time import Timestamp
 from .survey import Study, Survey, SurveyGroupItem, SurveyItemValidation, SurveySingleItem, SurveyItemGroupComponent, SurveyItemResponseComponent, SurveyItemComponent
-from .expression import expression_arg_parser, expression_parser
+from .expression import expression_arg_parser, expression_parser, Scalar
 
 def component_parser(obj):
     role = obj['role']
@@ -35,10 +35,16 @@ def component_parser(obj):
         comp.content = parse_translatable(obj['content'])
     
     if 'properties' in obj:
-            # Todo parsing
+            def parse_comp(value):
+                if isinstance(value, str):
+                    return Scalar("str", value)
+                if isinstance(value, (int, float)):
+                    return Scalar("num", value)
+                return expression_arg_parser(value)
             pp = {}
+
             for k, p in obj['properties'].items():
-                pp[k] = expression_arg_parser(p)
+                pp[k] = parse_comp(p)
             comp.properties = pp
 
     if 'description' in obj:
@@ -74,7 +80,9 @@ def survey_item_parser(obj):
         item = SurveyGroupItem(key,  id=_id, items=ii, selection=selection)
 
     else:
-        comp = component_parser(obj['components'])
+        comp = None
+        if 'components' in obj:
+            comp = component_parser(obj['components'])
         _type = obj.get('type')
         if 'validations' in obj:
             vv = []
