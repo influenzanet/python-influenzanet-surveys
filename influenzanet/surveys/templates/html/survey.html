@@ -63,10 +63,12 @@
     {% if item.type %}
     <div class="item-type">Type : {{ item.type }}</div>
     {% endif %}
+    {% if item.components %}
     <div class="item-components">
     <h5>Components</h5>
     {{ render_item_components(item.components) }}
     </div>
+    {% endif %}
     <div class="item-validations">
     <h5>Validations</h5>
     {{ render_validations(item.validations) }}
@@ -203,8 +205,10 @@
      <dd class="col-9">{{ translate(survey.props.name) }}</dd>
      <dt class="col-3">description</dt>
      <dd class="col-9">{{ translate(survey.props.description)}}</dd>
+     {% if "typicalDuration" in survey.props %}
      <dt class="col-3">typicalDuration</dt>
      <dd class="col-9">{{ translate(survey.props.typicalDuration) }}</dd>
+     {% endif %}
   </dl>
   {% if survey.metadata %}
     {{ render_metadata(survey.metadata) }}
