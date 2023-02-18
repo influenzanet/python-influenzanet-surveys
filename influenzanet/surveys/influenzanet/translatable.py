@@ -19,6 +19,8 @@ class Translatable:
             for item in self.value:
                 if(isinstance(item, Expression)):
                     v = item.to_readable(context)
+                    if not isinstance(v, str):
+                        v = str(v)
                 else:
                     v = str(item)
                 vv.append(v)
@@ -63,7 +65,8 @@ def to_translatable(data, fields):
         Transform some fields of a dictionnary to translatable object
     """
     for field in fields:
-        data[field] = parse_translatable(data[field])
+        if field in data:
+            data[field] = parse_translatable(data[field])
     return data
 
 def parse_translatable(values):
