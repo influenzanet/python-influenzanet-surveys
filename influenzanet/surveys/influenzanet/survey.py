@@ -260,7 +260,7 @@ class SurveyItemValidation:
 
 class SurveySingleItem(SurveyItem):
 
-    def __init__(self, key, components: SurveyItemGroupComponent, validations: Optional[List[SurveyItemValidation]], type, id=None):
+    def __init__(self, key, components: Optional[SurveyItemGroupComponent], validations: Optional[List[SurveyItemValidation]], type, id=None):
         super(SurveySingleItem, self).__init__(key=key, id=id)
         self.components = components
         self.validations = validations
@@ -421,4 +421,6 @@ class Survey(dict):
         """
             get survey version Id
         """
-        return self['versionId']
+        if 'versionId' in self:
+            return self['versionId']
+        return None
