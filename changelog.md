@@ -1,5 +1,14 @@
 # Changelog
 
+## v1.0.5
+
+- add preserve_item_version option for survey_transform_to_12(), using default=False
+
+## v1.0.4
+- parse survey component properties as expression
+- make single item components optional
+- use typed python
+
 ## v1.0.3
 
 - fix version id in survey template
