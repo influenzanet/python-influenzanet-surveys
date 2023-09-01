@@ -24,22 +24,24 @@ def require_fields(json, fields):
         if not field in json:
             raise Exception("Missing field '%s'" % field)
 
-def survey_transform_to_12(json):
+def survey_transform_to_12(json, preserve_item_version=False):
 
     try:
         require_fields(json, ['survey', 'studyKey'])
     except Exception as e:
         raise Exception("Doest seems to be a survey version 1.1 %s " % str(e))
-    
+
     def transform_item(item):
         if 'version' in item:
+            if preserve_item_version:
+                item["metadata"] = {'version': str(item['version'])}
             del item['version']
         if 'versionTags' in item:
             del item['versionTags']
         if 'items' in item:
             item['items'] = list(map(transform_item, item['items']))
         return item
-    
+
     survey = json['survey'] # First level not used any more
     surveyVersion = survey['current']
     del survey['current']
