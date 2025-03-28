@@ -21,7 +21,8 @@ classifiers = [
 
 dependencies = [
   "jinja2==3",
-  "jsonschema==4.*"
+  "jsonschema==4.*",
+  "requests==2.*"
 ]
 
 [project.optional-dependencies]

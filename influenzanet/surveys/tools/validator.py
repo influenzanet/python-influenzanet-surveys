@@ -12,8 +12,7 @@ from ..utils import read_json
 from .. import influenzanet
 from ..standard import StandardQuestion, StandardSurvey
 
-from urllib import request
-from urllib.error import URLError
+import requests
 
 class ConfigError(Exception):
     pass
@@ -24,14 +23,10 @@ def read_yaml(path):
 
 def read_from_url(url):
     try:
-        with request.urlopen(url) as response:
-            standard_json = response.read()
-            return standard_json
-    except URLError as e:
-        if hasattr(e, 'reason'):
-            raise ConfigError("read_from_url(%s): %s" % (url, e.reason,))
-        else:
-            raise ConfigError("read_from_url(%s): %s" % (url, e.code))
+        response = requests.get(url)
+        return response.content()
+    except requests.RequestException as e:
+        raise ConfigError("read_from_url(%s): %s" % (url, e, ))
 
 class ValidatorProblem:
 
