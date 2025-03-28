@@ -1,5 +1,12 @@
 # Changelog
 
+## v1.1.0
+
+- new `repository` module providing `SurveyRepositoryAPI` to import & query Influenzanet Survey Repository
+- new `preview` module to parse Survey preview (survey_info) data into a unified model
+- An experimental schema builder to infer export columns names from the preview model
+- package `requests` is now a dependency
+
 ## v1.0.5
 
 - add preserve_item_version option for survey_transform_to_12(), using default=False
