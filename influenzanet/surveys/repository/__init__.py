@@ -1,5 +1,6 @@
 import requests
 import json
+from time import sleep
 from typing import List, Optional, Dict, Any
 from requests.auth import HTTPBasicAuth
 
@@ -15,8 +16,78 @@ class ApiError(Exception):
         self.status = status
         self.response = response       
     
+    def is_too_many_request(self):
+        """
+            Check if response is 
+        """
+        return self.status is not None and self.status == 429
+    
+    def retry_after(self):
+        """
+            Get Retry-After header
+        """
+        if self.response is None or self.response.headers is None:
+            return None
+        retry = self.response.headers.get('retry-after')
+        if retry is None:
+            return None
+        return int(retry)
+    
+    def wait_retry_after(self, show:bool=True):
+        retry = self.retry_after()
+        if retry is None:
+            return False
+        if show:
+            print("Waiting {} secs from Retry-After header".format(retry))
+        sleep(retry)
+        return True
+        
+class ApiRateLimiter:
+    """
+        Collect information about an eventual rate limiter 
+        Provides wait() method to wait, or wait_delay() to get the delay
+    """
+    def __init__(self, headers):
+        limit = headers.get('x-ratelimit-limit', None)
+        self.limit = 0
+        self.remaining = 0
+        self.reset = 0
+        if limit is not None:
+            self.limit = int(limit)
+        remaining = headers.get('x-ratelimit-remaining', None)
+        if remaining is not None:
+            self.remaining = int(remaining)
+        reset = headers.get('x-ratelimit-reset', None)
+        if reset is not None:
+            self.reset = int(reset) 
+    
+    def wait_delay(self):
+        """
+            Compute the delay to wait (in sec.) considering the rate limiter info
+        """
+        if self.limit == 0 or self.reset == 0:
+            return 0
+        if self.remaining == 0:
+            return self.reset
+        w = (self.remaining / self.reset) + 0.05
+        return w
+
+    def wait(self, show: bool=True):
+        w = self.wait_delay()
+        if w > 0:
+            if show:
+                print("Waiting %f seconds (limit=%d, remains=%d, reset=%d)" % (w, self.limit, self.remaining, self.reset))
+            sleep(w)
+
+class APIResponse:
+
+    def __init__(self, data, headers):
+        self.data = data
+        self.headers = headers
+        self.limiter = ApiRateLimiter(headers)
+
 class ImportResponse:
-    def __init__(self, meta, created:bool):
+    def __init__(self, meta, created:bool, limiter: ApiRateLimiter):
         self.id = meta.get('id', None)
         self.version = meta.get('version')
         self.published = meta.get('published')
@@ -24,6 +95,7 @@ class ImportResponse:
         self.survey_name = meta.get('name')
         self.model_type = meta.get('model_type')
         self.created = created
+        self.limiter = limiter
  
 class SurveyRepositoryAPI:
 
@@ -99,7 +171,8 @@ class SurveyRepositoryAPI:
             created = False
             if r.status_code == 201:
                 created = True
-            response = ImportResponse(d, created=created)
+            limiter = ApiRateLimiter(r.headers)
+            response = ImportResponse(d, created=created, limiter=limiter)
             return response
         self.create_error(r)
         
@@ -142,7 +215,7 @@ class SurveyRepositoryAPI:
         url = "{}/survey/{}".format(self.api_url, id)
         r = requests.get(url)
         if r.status_code == 200:
-            return r.json()
+            return APIResponse(r.json(), r.headers)
         self.create_error(r)
 
     def load_survey_data(self, id):
@@ -153,7 +226,7 @@ class SurveyRepositoryAPI:
         url = "{}/survey/{}/data".format(self.api_url, id)
         r = requests.get(url)
         if r.status_code == 200:
-            return r.json()
+            return APIResponse(r.json(), r.headers)
         self.create_error(r)
        
          
