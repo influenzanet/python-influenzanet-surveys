@@ -1,6 +1,7 @@
 import requests
 import json
 from time import sleep
+import datetime
 from typing import List, Optional, Dict, Any
 from requests.auth import HTTPBasicAuth
 
@@ -86,6 +87,17 @@ class APIResponse:
         self.headers = headers
         self.limiter = ApiRateLimiter(headers)
 
+class AuthKey:
+    def __init__(self, key:str, expires: datetime.datetime):
+        self.key = key
+        self.expires = expires
+
+    def expired(self):
+        return self.expires < datetime.datetime.now()
+
+    def add_header(self, headers:dict):
+        headers['Authorization'] = "Bearer {}".format(self.key)
+
 class ImportResponse:
     def __init__(self, meta, created:bool, limiter: ApiRateLimiter):
         self.id = meta.get('id', None)
@@ -121,6 +133,7 @@ class SurveyRepositoryAPI:
                 raise ValueError("Missing field 'password' in survey repository config")
             creds = HTTPBasicAuth(config['user'], config['password'])
         self.credentials = creds
+        self.auth_key: Optional[AuthKey] = None
         self.platform_code = config.get('platform_code', None)
 
     def create_error(self, response: requests.Response):
@@ -134,6 +147,17 @@ class SurveyRepositoryAPI:
         if msg is None:
             msg = "Request error : " + response.reason
         raise ApiError(msg, response.status_code, response=response)
+    
+    def login(self):
+        if self.auth_key is None or self.auth_key.expired():
+            url = "{}/user/login".format(self.api_url)
+            r = requests.get(url, auth=self.credentials)
+            if r.status_code >= 200 and r.status_code <= 202:
+                d = r.json()
+                expires = datetime.datetime.now() + datetime.timedelta(seconds=d['ttl'])
+                self.auth_key = AuthKey(d['key'], expires=expires)
+            else:
+                raise ApiError("Unable to login", r.status_code, response=r)
         
     def import_survey(self, survey, platform=None, namespace=None, version=None, name=None):
         """
@@ -163,9 +187,14 @@ class SurveyRepositoryAPI:
             data['version'] = version
         if name is not None:
             data['name'] = name
-        
         files = {'survey': ('survey_json', survey, 'application/json')}
-        r = requests.post(url, auth=self.credentials, files=files, data=data)
+
+        headers = {}
+        self.login()
+        if self.auth_key is None:
+            raise ApiError("Authkey is not set")
+        self.auth_key.add_header(headers)
+        r = requests.post(url, headers=headers, files=files, data=data)
         if r.status_code >= 200 and r.status_code < 300:
             d = r.json()
             created = False
