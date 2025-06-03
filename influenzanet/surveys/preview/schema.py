@@ -2,6 +2,7 @@
 from typing import Dict, Optional, List
 from . import models as preview
 from .models import SurveyPreviewOption, SurveyPreviewQuestion, SurveyPreviewResponseGroup, SurveyPreview
+from collections import OrderedDict
 
 class SurveyRef:
     """
@@ -99,6 +100,13 @@ class SurveyExportSchema:
             problems[name] = pp
         return {"columns": cols, "problems": problems}
     
+    def get_column_types(self):
+        d = OrderedDict()
+        for name, col in self.columns.items():
+            d[name] = col.value_type
+        return d
+        
+    
 QUESTION_TYPES_SINGLE_GROUP = ['single_choice', 'multiple_choice']
 OPTION_OPEN_TYPES = ['text']
 
@@ -176,7 +184,7 @@ class HandlerSingleChoice(HandlerResponse):
 class HandlerValue(HandlerResponse):
 
     def build_response(self, rg: SurveyPreviewResponseGroup, schema: SurveyExportSchema):
-        schema.register(self.value_column(rg), 'bool', self.as_ref(rg))
+        schema.register(self.value_column(rg), self.value_type, self.as_ref(rg))
 
 class HandlerMultipleChoice(HandlerResponse):
     
@@ -350,6 +358,8 @@ class SurveySchemaBuilder:
                     prev.visit(schema.version)
             else:
                 self.schema.columns[name] = column
+                column.visit(schema.version)
+
         self.schema.merge_problems(schema.problems)
 
 class ReadableSchema:
