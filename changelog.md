@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.2.0
+
+- Survey schema fix first visit & response type inference (was fixed to bool)
+- Handle rate limit in survey repository
+- Survey repository Authentication used authentication header instead of login/pwd
+
 ## v1.1.0
 
 - new `repository` module providing `SurveyRepositoryAPI` to import & query Influenzanet Survey Repository
